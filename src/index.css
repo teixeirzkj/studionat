@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-serif: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+
+  /* Paleta do estúdio */
+  --color-blush: #fff5f8; /* rosa muito claro */
+  --color-petal: #f5d6e2; /* rosa suave */
+  --color-brand: #d76b98; /* rosa principal — detalhes e destaques */
+  --color-brand-dark: #9d426a; /* rosa escuro — botões e links (contraste AA) */
+  --color-ink: #33242c; /* texto principal */
+  --color-ink-soft: #6b5560; /* texto secundário */
+
+  --shadow-soft: 0 10px 40px -18px rgb(157 66 106 / 0.35);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-dark;
+  }
+
+  ::selection {
+    @apply bg-petal text-ink;
+  }
+}
+
+/* Animação de entrada discreta (componente Reveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
