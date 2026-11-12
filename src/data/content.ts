@@ -3,90 +3,85 @@ import type { FaqItem, GalleryItem, Service, ServiceCategory, Testimonial } from
 /**
  * Conteúdo inicial da landing page.
  *
+ * Serviços, preços e durações foram copiados da página pública de agendamento
+ * do estúdio (online.maapp.com.br/studionatallianjos) em 11/11/2026.
+ *
  * É o que o site exibe enquanto o Supabase não está conectado. A partir da
  * Etapa 3, serviços, galeria e depoimentos são lidos do banco e administrados
  * pelo painel; este arquivo vira apenas a carga inicial (seed).
- *
- * IMPORTANTE: preços e durações estão `null` porque não estão publicados nas
- * referências do estúdio. Não preencha com valores estimados.
  */
 
 export const categoryLabels: Record<ServiceCategory, string> = {
-  sobrancelhas: 'Sobrancelhas',
-  epilacao: 'Epilação',
-  unhas: 'Unhas',
-  massagem: 'Massagem',
-  micropigmentacao: 'Micropigmentação',
-  tatuagem: 'Tatuagem',
-  piercing: 'Piercing',
+  sobrancelhas: 'Design de sobrancelha',
+  'epilacao-cera': 'Epilação com cera',
+  'epilacao-linha': 'Epilação com linha',
+  micropigmentacao: 'Micropigmentação de sobrancelhas',
   outros: 'Outros',
 }
 
-const service = (
-  id: string,
-  name: string,
-  category: ServiceCategory,
-  description: string,
-): Service => ({
-  id,
-  name,
-  category,
-  description,
-  priceCents: null,
-  durationMinutes: null,
-  imageUrl: null,
-  active: true,
-})
+/** Ordem em que as categorias aparecem no site. */
+export const categoryOrder: ServiceCategory[] = ['sobrancelhas', 'epilacao-cera', 'epilacao-linha', 'micropigmentacao', 'outros']
+
+const slug = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+/** [nome, duração em minutos, preço em reais] */
+type Row = [name: string, minutes: number, reais: number]
+
+const fromRows = (category: ServiceCategory, rows: Row[]): Service[] =>
+  rows.map(([name, minutes, reais]) => ({
+    id: slug(name),
+    name,
+    category,
+    description: '',
+    priceCents: reais * 100,
+    durationMinutes: minutes,
+    imageUrl: null,
+    active: true,
+  }))
 
 export const services: Service[] = [
-  service(
-    'design-de-sobrancelhas',
-    'Design de sobrancelhas',
-    'sobrancelhas',
-    'Desenho pensado para o formato do seu rosto, valorizando o olhar com naturalidade.',
-  ),
-  service(
-    'epilacao-com-cera',
-    'Epilação com cera',
-    'epilacao',
-    'Remoção dos pelos com cuidado e técnica, deixando a pele lisa e macia por mais tempo.',
-  ),
-  service(
-    'epilacao-com-linha',
-    'Epilação com linha',
-    'epilacao',
-    'Técnica precisa e delicada, indicada para o rosto e para peles mais sensíveis.',
-  ),
-  service(
-    'manicure-e-pedicure',
-    'Manicure e pedicure',
-    'unhas',
-    'Cuidado completo para mãos e pés, com acabamento caprichado.',
-  ),
-  service(
-    'massagens',
-    'Massagens',
-    'massagem',
-    'Um momento de pausa para relaxar o corpo e aliviar as tensões do dia a dia.',
-  ),
-  service(
-    'micropigmentacao',
-    'Micropigmentação',
-    'micropigmentacao',
-    'Realce duradouro e de aparência natural, planejado em conjunto com você antes do procedimento.',
-  ),
-  service(
-    'tatuagens',
-    'Tatuagens',
-    'tatuagem',
-    'Traços delicados, feitos com atenção a cada detalhe do desenho que você escolher.',
-  ),
-  service(
-    'body-piercing',
-    'Body piercing',
-    'piercing',
-    'Perfuração realizada com técnica e orientação de cuidados para uma boa cicatrização.',
-  ),
+  ...fromRows('sobrancelhas', [
+    ['Design com henna', 30, 50],
+    ['Design com tintura', 30, 50],
+    ['Design simples personalizado', 15, 35],
+  ]),
+  ...fromRows('epilacao-cera', [
+    ['Barba + design', 30, 80],
+    ['Epilação abdômen + peitoral', 30, 70],
+    ['Epilação abdômen completo', 30, 60],
+    ['Epilação abdômen faixa', 15, 20],
+    ['Epilação axila', 20, 35],
+    ['Epilação de costas', 30, 60],
+    ['Epilação de coxas', 30, 40],
+    ['Epilação de meia perna', 30, 40],
+    ['Epilação perna completa', 30, 60],
+    ['Epilação virilha cavada', 25, 40],
+    ['Epilação virilha completa', 30, 60],
+    ['Epilação virilha completa + perianal', 30, 60],
+    ['Epilação virilha simples', 20, 30],
+  ]),
+  ...fromRows('epilacao-linha', [
+    ['Epilação costeletas', 30, 20],
+    ['Epilação da testa', 30, 15],
+    ['Epilação de buço', 5, 15],
+    ['Epilação de rosto + design e henna', 40, 75],
+    ['Epilação do queixo', 10, 15],
+    ['Epilação rosto completo', 30, 55],
+    ['Rosto + design sobrancelha', 40, 65],
+  ]),
+  ...fromRows('micropigmentacao', [
+    ['Micropigmentação fio a fio', 80, 400],
+    ['Micropigmentação híbrida', 120, 450],
+    ['Micropigmentação shadow', 140, 450],
+    ['Retoque anual micro', 60, 250],
+    ['Retoque mensal micro', 60, 80],
+  ]),
 ]
 
 /** Somente fotos reais e autorizadas. Vazio = seção mostra o convite para o Instagram. */

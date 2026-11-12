@@ -19,7 +19,7 @@ export function About() {
     <Section id="sobre">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <Reveal className="mx-auto w-full max-w-sm lg:max-w-md">
-          <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-soft">
+          <div className="aspect-square overflow-hidden rounded-3xl shadow-soft">
             <ImageSlot src={site.images.owner} alt="Natalli Anjos, proprietária do estúdio" />
           </div>
         </Reveal>
@@ -31,7 +31,7 @@ export function About() {
           </h2>
           <p className="mt-6 text-base leading-relaxed text-ink-soft sm:text-lg">
             O {site.name} fica no centro de {site.address.city} e reúne, em um só lugar, os cuidados que fazem
-            diferença no dia a dia: sobrancelhas, epilação, micropigmentação, unhas, massagens e mais.
+            diferença no dia a dia: design de sobrancelhas, epilação com cera e com linha e micropigmentação.
           </p>
 
           <ul className="mt-6 flex flex-wrap gap-2" aria-label="Especialidades">

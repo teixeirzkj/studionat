@@ -3,15 +3,7 @@
  * Espelham as tabelas que serão criadas no Supabase (Etapa 3).
  */
 
-export type ServiceCategory =
-  | 'sobrancelhas'
-  | 'epilacao'
-  | 'unhas'
-  | 'massagem'
-  | 'micropigmentacao'
-  | 'tatuagem'
-  | 'piercing'
-  | 'outros'
+export type ServiceCategory = 'sobrancelhas' | 'epilacao-cera' | 'epilacao-linha' | 'micropigmentacao' | 'outros'
 
 export interface Service {
   id: string
@@ -47,11 +39,15 @@ export interface FaqItem {
   answer: string
 }
 
-/** 0 = domingo … 6 = sábado */
+export interface TimePeriod {
+  opensAt: string // "08:00"
+  closesAt: string // "09:30"
+}
+
+/** 0 = domingo … 6 = sábado. Sem períodos = fechado. Mais de um período = há intervalo entre eles. */
 export interface BusinessHours {
   weekday: 0 | 1 | 2 | 3 | 4 | 5 | 6
-  opensAt: string // "09:00"
-  closesAt: string // "18:00"
+  periods: TimePeriod[]
 }
 
 export type AppointmentStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled' | 'completed' | 'no_show'

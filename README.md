@@ -35,13 +35,11 @@ src/
 
 ## Informações que ainda precisam ser preenchidas
 
-Nada foi inventado: o que não está publicado nas referências do estúdio ficou vazio e o site se adapta.
+Serviços, preços, durações, expediente e a foto de perfil foram copiados da página pública de agendamento do estúdio (online.maapp.com.br/studionatallianjos) em 11/11/2026. Nada foi inventado: o que não está publicado ficou vazio e o site se adapta.
 
 | O quê | Onde | Enquanto estiver vazio |
 | --- | --- | --- |
-| Preço e duração de cada serviço | `src/data/content.ts` | Card mostra "Consulte o valor" |
-| Fotos (logo, hero, proprietária, serviços) | `public/images/` + `src/config/site.ts` | Fundo decorativo da marca |
-| Horários de funcionamento | `src/config/site.ts` → `hours` | "Atendimento com hora marcada" |
+| Fotos (logo, hero, serviços) | `public/images/` + `src/config/site.ts` | Fundo decorativo da marca |
 | Formações e certificações | `src/config/site.ts` → `certifications` | Bloco não aparece |
 | Fotos da galeria (autorizadas) | `src/data/content.ts` → `gallery` | Convite para o Instagram |
 | Depoimentos reais | `src/data/content.ts` → `testimonials` | Seção não aparece |

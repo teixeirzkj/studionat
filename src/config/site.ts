@@ -1,4 +1,6 @@
-import type { BusinessHours } from '@/types'
+import type { BusinessHours, TimePeriod } from '@/types'
+
+const p = (opensAt: string, closesAt: string): TimePeriod => ({ opensAt, closesAt })
 
 /**
  * Dados institucionais do estúdio.
@@ -34,14 +36,23 @@ export const site = {
     zip: '44720-000',
   },
 
-  /** A CONFIRMAR: horários de funcionamento. Vazio = rodapé mostra "Atendimento com hora marcada". */
-  hours: [] as BusinessHours[],
+  /** Expediente publicado na página de agendamento do estúdio (11/11/2026). */
+  hours: [
+    { weekday: 1, periods: [] },
+    { weekday: 2, periods: [p('08:00', '09:30'), p('12:00', '18:00')] },
+    { weekday: 3, periods: [p('08:00', '09:30'), p('11:00', '18:30')] },
+    { weekday: 4, periods: [p('11:00', '12:30'), p('13:00', '17:00')] },
+    { weekday: 5, periods: [p('08:30', '12:30'), p('13:30', '20:00')] },
+    { weekday: 6, periods: [p('08:00', '12:00'), p('13:00', '15:30')] },
+    { weekday: 0, periods: [] },
+  ] as BusinessHours[],
 
-  /** A CONFIRMAR: fotos oficiais. Coloque os arquivos em /public/images e informe o caminho. */
+  /** Fotos oficiais ficam em /public/images. `null` = fundo decorativo da marca. */
   images: {
     logo: null as string | null, // ex.: '/images/logo.svg'
     hero: null as string | null, // ex.: '/images/hero.jpg'
-    owner: null as string | null, // ex.: '/images/natalli.jpg'
+    /** Foto de perfil da página de agendamento do estúdio (500×500). */
+    owner: '/images/natalli.jpg' as string | null,
   },
 
   /** A CONFIRMAR: formações e certificações da profissional. Vazio = bloco não aparece. */

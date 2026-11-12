@@ -56,8 +56,14 @@ export function Footer() {
               {site.hours.map((h) => (
                 <li key={h.weekday} className="flex justify-between gap-4">
                   <span>{weekdayNames[h.weekday]}</span>
-                  <span>
-                    {h.opensAt} – {h.closesAt}
+                  <span className="text-right">
+                    {h.periods.length === 0
+                      ? 'Fechado'
+                      : h.periods.map((period) => (
+                          <span key={period.opensAt} className="block whitespace-nowrap">
+                            {period.opensAt} – {period.closesAt}
+                          </span>
+                        ))}
                   </span>
                 </li>
               ))}
