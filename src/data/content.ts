@@ -118,8 +118,27 @@ export const services: Service[] = [
   ]),
 ]
 
-/** Somente fotos reais e autorizadas. Vazio = seção mostra o convite para o Instagram. */
-export const gallery: GalleryItem[] = []
+/**
+ * MODELO: imagens geradas, usadas para apresentar o site à cliente (12/11/2026).
+ * Devem ser trocadas por fotos reais e autorizadas; ao trocar, mudar
+ * `galleryIsIllustrative` para `false` em `src/config/site.ts`.
+ * Vazio = seção mostra o convite para o Instagram.
+ */
+const galleryItem = (id: string, category: ServiceCategory, caption: string): GalleryItem => ({
+  id,
+  category,
+  imageUrl: `/images/galeria/${id}.jpg`,
+  caption,
+})
+
+export const gallery: GalleryItem[] = [
+  galleryItem('antes-depois-sobrancelhas', 'sobrancelhas', 'Antes e depois — design de sobrancelhas'),
+  galleryItem('resultados-micropigmentacao', 'micropigmentacao', 'Micropigmentação — antes e depois'),
+  galleryItem('micropigmentacao-fio-a-fio', 'micropigmentacao', 'Micropigmentação fio a fio'),
+  galleryItem('micropigmentacao-shadow', 'micropigmentacao', 'Micropigmentação shadow'),
+  galleryItem('design-com-henna', 'sobrancelhas', 'Design com henna'),
+  galleryItem('design-personalizado', 'sobrancelhas', 'Design personalizado'),
+]
 
 /** Somente avaliações reais de clientes. Vazio = seção não aparece no site. */
 export const testimonials: Testimonial[] = []

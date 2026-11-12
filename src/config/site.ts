@@ -60,6 +60,13 @@ export const site = {
     owner: '/images/natalli.jpg' as string | null,
   },
 
+  /**
+   * `true` enquanto a galeria usa imagens geradas como modelo (12/11/2026).
+   * Mostra o aviso "imagens ilustrativas" no site. Trocar para `false` quando
+   * a galeria tiver apenas fotos reais, autorizadas pelas clientes.
+   */
+  galleryIsIllustrative: true,
+
   /** A CONFIRMAR: formações e certificações da profissional. Vazio = bloco não aparece. */
   certifications: [] as string[],
 } as const

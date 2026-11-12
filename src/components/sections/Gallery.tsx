@@ -69,7 +69,11 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
       <SectionHeading
         eyebrow="Galeria"
         title="Resultados que falam por si"
-        description="Fotos reais de procedimentos realizados no estúdio, publicadas com autorização das clientes."
+        description={
+          site.galleryIsIllustrative && items.length > 0
+            ? 'Uma amostra do estilo dos nossos procedimentos. Imagens ilustrativas.'
+            : 'Fotos reais de procedimentos realizados no estúdio, publicadas com autorização das clientes.'
+        }
       />
 
       {items.length === 0 ? (
@@ -120,6 +124,9 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
                   />
                   {item.beforeImageUrl && (
                     <span className="absolute top-2 left-2 rounded-full bg-white/90 px-3 py-1 text-xs text-ink">Antes e depois</span>
+                  )}
+                  {site.galleryIsIllustrative && (
+                    <span className="absolute right-2 bottom-2 rounded-full bg-ink/70 px-2.5 py-0.5 text-[0.65rem] text-white">Imagem ilustrativa</span>
                   )}
                 </button>
               </li>
