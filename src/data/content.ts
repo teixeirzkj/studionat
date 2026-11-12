@@ -35,11 +35,33 @@ const slug = (text: string) =>
  * (No banco, a foto de cada serviço fica na coluna `image_url` e é trocada pelo painel.)
  */
 const serviceImages = new Set([
+  'barba-design',
   'design-com-henna',
   'design-com-tintura',
   'design-simples-personalizado',
-  'barba-design',
+  'epilacao-abdomen-completo',
+  'epilacao-abdomen-faixa',
   'epilacao-abdomen-peitoral',
+  'epilacao-axila',
+  'epilacao-costeletas',
+  'epilacao-da-testa',
+  'epilacao-de-buco',
+  'epilacao-de-costas',
+  'epilacao-de-meia-perna',
+  'epilacao-de-rosto-design-e-henna',
+  'epilacao-do-queixo',
+  'epilacao-perna-completa',
+  'epilacao-rosto-completo',
+  'epilacao-virilha-cavada',
+  'epilacao-virilha-completa',
+  'epilacao-virilha-completa-perianal',
+  'epilacao-virilha-simples',
+  'micropigmentacao-fio-a-fio',
+  'micropigmentacao-hibrida',
+  'micropigmentacao-shadow',
+  'retoque-anual-micro',
+  'retoque-mensal-micro',
+  'rosto-design-sobrancelha',
 ])
 
 /** [nome, duração em minutos, preço em reais] */
