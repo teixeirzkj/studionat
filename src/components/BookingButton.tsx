@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useBooking } from '@/components/booking/BookingContext'
 import { Button } from '@/components/ui/Button'
 import { bookingUrl } from '@/lib/booking'
 import { track } from '@/lib/analytics'
@@ -14,15 +15,28 @@ interface Props {
   className?: string
 }
 
-/** Botão de conversão principal. Único ponto de entrada do agendamento em todo o site. */
+/**
+ * Botão de conversão principal — único ponto de entrada do agendamento.
+ * Com o banco conectado abre o agendamento online; sem ele, leva ao WhatsApp
+ * do estúdio com a mensagem preenchida.
+ */
 export function BookingButton({ service, placement, children = 'Agendar horário', ...buttonProps }: Props) {
+  const booking = useBooking()
+
+  if (booking.online) {
+    return (
+      <Button onClick={() => booking.open({ service, placement })} {...buttonProps}>
+        {children}
+      </Button>
+    )
+  }
+
   return (
     <Button
       href={bookingUrl(service)}
       onClick={() => {
         const params = { placement, ...(service ? { service: service.name } : {}) }
         track('booking_start', params)
-        // Na Etapa 1 o agendamento acontece pelo WhatsApp, então também conta como clique no WhatsApp.
         track('whatsapp_click', params)
       }}
       {...buttonProps}

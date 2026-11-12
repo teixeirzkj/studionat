@@ -1,10 +1,10 @@
-import { lazy, Suspense } from 'react'
+﻿import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Landing from '@/pages/Landing'
 
 // Páginas secundárias e o painel ficam fora do pacote inicial da landing (desempenho em anúncios).
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'))
-const AdminPlaceholder = lazy(() => import('@/pages/admin/AdminPlaceholder'))
+const AdminApp = lazy(() => import('@/pages/admin/AdminApp'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 function PageLoader() {
@@ -23,7 +23,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/privacidade" element={<PrivacyPolicy />} />
-          <Route path="/admin/*" element={<AdminPlaceholder />} />
+          <Route path="/admin/*" element={<AdminApp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

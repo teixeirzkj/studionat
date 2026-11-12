@@ -1,15 +1,19 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+const url = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.trim()
+/** Chave pública do projeto: "publishable" (sb_publishable_…) ou a antiga "anon". */
+const publicKey = (
+  (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ??
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined)
+)?.trim()
 
 /** `true` somente quando as credenciais públicas do Supabase foram configuradas. */
-export const isSupabaseConfigured = Boolean(url && anonKey)
+export const isSupabaseConfigured = Boolean(url && publicKey)
 
 /**
- * Cliente do Supabase com a chave pública (anon). Toda a proteção dos dados
- * fica nas políticas de Row Level Security do banco (Etapa 3).
+ * Cliente do Supabase com a chave pública. Toda a proteção dos dados fica nas
+ * políticas de Row Level Security e nas funções do banco (supabase/migrations).
  * `null` enquanto o projeto não estiver conectado — o site continua funcionando
- * com o conteúdo de `src/data/content.ts`.
+ * com o conteúdo de `src/data/content.ts` e agendamento pelo WhatsApp.
  */
-export const supabase: SupabaseClient | null = isSupabaseConfigured ? createClient(url!, anonKey!) : null
+export const supabase: SupabaseClient | null = isSupabaseConfigured ? createClient(url!, publicKey!) : null

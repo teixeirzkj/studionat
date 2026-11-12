@@ -6,11 +6,9 @@ export function whatsappUrl(message: string = site.whatsapp.defaultMessage) {
 }
 
 /**
- * Destino dos botões "Agendar".
- *
- * ETAPA 1 (atual): abre o WhatsApp do estúdio com a mensagem já preenchida.
- * ETAPA 2: este é o único ponto a trocar para abrir o fluxo de agendamento
- * online (procedimento → data → horário → dados → confirmação).
+ * Destino dos botões "Agendar" quando o agendamento online não está
+ * disponível (banco não conectado): WhatsApp do estúdio com a mensagem
+ * já preenchida. Com o banco conectado, o BookingButton abre o assistente.
  */
 export function bookingUrl(service?: Pick<Service, 'name'>) {
   return whatsappUrl(

@@ -42,7 +42,7 @@ function ServiceCard({ service }: { service: Service }) {
   )
 }
 
-export function Services({ services }: { services: Service[] }) {
+export function Services({ services, loading = false }: { services: Service[]; loading?: boolean }) {
   const active = services.filter((s) => s.active)
   const categories = categoryOrder.filter((c) => active.some((s) => s.category === c))
   const [selected, setSelected] = useState<ServiceCategory | null>(null)
@@ -56,6 +56,15 @@ export function Services({ services }: { services: Service[] }) {
         title="Procedimentos feitos com técnica e carinho"
         description="Escolha o cuidado que você procura e solicite o seu horário em poucos toques."
       />
+
+      {loading && (
+        <div role="status" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <span className="sr-only">Carregando serviços…</span>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-44 animate-pulse rounded-3xl bg-white/70" />
+          ))}
+        </div>
+      )}
 
       {categories.length > 1 && (
         <div className="mb-10 flex flex-wrap justify-center gap-2" role="group" aria-label="Categorias de serviços">

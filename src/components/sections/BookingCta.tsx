@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Section'
 
 const steps = [
   { title: 'Escolha o procedimento', text: 'Veja os serviços e selecione o que você deseja.' },
-  { title: 'Solicite o seu horário', text: 'Envie o pedido com o dia e o período de sua preferência.' },
+  { title: 'Solicite o seu horário', text: 'Escolha o dia e o horário que preferir e envie o pedido.' },
   { title: 'Receba a confirmação', text: 'O estúdio confirma o agendamento com você pelo WhatsApp.' },
 ]
 

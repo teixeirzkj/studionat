@@ -1,3 +1,4 @@
+import { BookingProvider } from '@/components/booking/BookingContext'
 import { ConsentBanner } from '@/components/layout/ConsentBanner'
 import { Footer } from '@/components/layout/Footer'
 import { Header, type NavItem } from '@/components/layout/Header'
@@ -12,7 +13,7 @@ import { Testimonials } from '@/components/sections/Testimonials'
 import { useSiteContent } from '@/hooks/useSiteContent'
 
 export default function Landing() {
-  const { services, gallery, testimonials, faq } = useSiteContent()
+  const { services, gallery, testimonials, faq, loading } = useSiteContent()
 
   const nav: NavItem[] = [
     { label: 'Sobre', href: '/#sobre' },
@@ -24,7 +25,7 @@ export default function Landing() {
   ]
 
   return (
-    <>
+    <BookingProvider services={services}>
       <a
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-white focus:px-5 focus:py-3"
@@ -35,7 +36,7 @@ export default function Landing() {
       <main id="conteudo">
         <Hero />
         <About />
-        <Services services={services} />
+        <Services services={services} loading={loading} />
         <Gallery items={gallery} />
         <Testimonials items={testimonials} />
         <BookingCta />
@@ -44,6 +45,6 @@ export default function Landing() {
       <Footer />
       <WhatsAppFloat />
       <ConsentBanner />
-    </>
+    </BookingProvider>
   )
 }
