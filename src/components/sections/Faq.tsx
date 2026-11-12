@@ -10,11 +10,11 @@ export function Faq({ items }: { items: FaqItem[] }) {
         {items.map((item) => (
           // <details> nativo: acessível por teclado e leitores de tela sem JavaScript.
           <details key={item.question} className="group">
-            <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 font-serif text-xl [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-13 cursor-pointer list-none items-center justify-between gap-4 py-3 font-serif text-[1.05rem] sm:min-h-16 sm:py-4 sm:text-xl [&::-webkit-details-marker]:hidden">
               {item.question}
               <ChevronDown className="size-5 shrink-0 text-brand-dark transition group-open:rotate-180" />
             </summary>
-            <p className="pr-9 pb-6 leading-relaxed text-ink-soft">{item.answer}</p>
+            <p className="pr-9 pb-5 text-sm leading-relaxed text-ink-soft sm:pb-6 sm:text-base">{item.answer}</p>
           </details>
         ))}
       </div>

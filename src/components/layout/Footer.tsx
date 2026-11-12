@@ -14,10 +14,10 @@ const linkClass = 'transition hover:text-white'
 export function Footer({ hours = site.hours }: { hours?: BusinessHours[] }) {
   return (
     <footer id="contato" className="bg-ink text-white/75">
-      <Container className="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
+      <Container className="grid gap-8 py-10 sm:grid-cols-2 sm:gap-12 sm:py-16 lg:grid-cols-4">
         <div>
           {site.images.logoLight ? (
-            <img src={site.images.logoLight} alt={site.name} width={404} height={220} loading="lazy" className="h-24 w-auto" />
+            <img src={site.images.logoLight} alt={site.name} width={404} height={220} loading="lazy" className="h-20 w-auto sm:h-24" />
           ) : (
             <>
               <p className="text-[0.6rem] font-semibold tracking-[0.42em] text-petal uppercase">Studio</p>

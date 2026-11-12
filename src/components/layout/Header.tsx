@@ -35,7 +35,7 @@ export function Header({ nav }: { nav: NavItem[] }) {
         scrolled || open ? 'bg-white/90 shadow-[0_1px_0_0_rgb(157_66_106/0.12)] backdrop-blur-md' : 'bg-transparent',
       )}
     >
-      <Container className="flex h-18 items-center justify-between gap-6">
+      <Container className="flex h-15 items-center justify-between gap-3 sm:h-18 sm:gap-6">
         <Logo />
 
         <nav aria-label="Seções do site" className="hidden items-center gap-8 lg:flex">
@@ -47,7 +47,7 @@ export function Header({ nav }: { nav: NavItem[] }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <BookingButton placement="header" className="hidden sm:inline-flex" />
+          <BookingButton placement="header" className="max-sm:min-h-9 max-sm:px-4 max-sm:text-xs" />
           <button
             type="button"
             className="grid size-11 cursor-pointer place-items-center rounded-full text-ink hover:bg-blush lg:hidden"

@@ -14,26 +14,26 @@ const steps = [
  */
 export function BookingCta() {
   return (
-    <section id="agendamento" className="bg-brand-dark py-20 text-white sm:py-28">
+    <section id="agendamento" className="bg-brand-dark py-12 text-white sm:py-28">
       <Container>
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-xs font-semibold tracking-[0.28em] text-petal uppercase">Agendamento</p>
-          <h2 className="text-4xl leading-tight font-medium text-balance sm:text-5xl">Reserve um momento só para você</h2>
+          <p className="mb-2 text-[0.65rem] font-semibold tracking-[0.28em] text-petal uppercase sm:mb-3 sm:text-xs">Agendamento</p>
+          <h2 className="text-[1.7rem] leading-tight font-medium text-balance sm:text-5xl">Reserve um momento só para você</h2>
         </Reveal>
 
-        <ol className="mx-auto mt-14 grid max-w-4xl gap-8 sm:grid-cols-3">
+        <ol className="mx-auto mt-7 grid max-w-4xl gap-5 sm:mt-14 sm:grid-cols-3 sm:gap-8">
           {steps.map((step, i) => (
             <li key={step.title} className="text-center">
-              <span aria-hidden="true" className="font-serif text-5xl text-petal italic">
+              <span aria-hidden="true" className="font-serif text-3xl text-petal italic sm:text-5xl">
                 {i + 1}
               </span>
-              <h3 className="mt-2 text-2xl font-medium">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/80">{step.text}</p>
+              <h3 className="mt-1 text-xl font-medium sm:mt-2 sm:text-2xl">{step.title}</h3>
+              <p className="mt-1 text-[0.8rem] leading-relaxed text-white/80 sm:mt-2 sm:text-sm">{step.text}</p>
             </li>
           ))}
         </ol>
 
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center sm:mt-12">
           <BookingButton placement="secao-agendamento" size="lg" className="bg-white !text-brand-dark hover:bg-blush">
             Agende seu horário
           </BookingButton>
