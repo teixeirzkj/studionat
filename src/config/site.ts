@@ -54,6 +54,8 @@ export const site = {
     logoLight: '/images/logo-branca.png' as string | null,
     /** Imagem ilustrativa do ambiente (gerada por IA, enviada pelo cliente em 12/11/2026). */
     hero: '/images/hero.jpg' as string | null,
+    /** Versão horizontal da imagem do topo, usada em telas largas. */
+    heroWide: '/images/hero-wide.jpg' as string | null,
     /** Imagem ilustrativa do ambiente para a seção "Sobre". */
     studio: '/images/sobre-estudio.jpg' as string | null,
     /** Foto de perfil da página de agendamento do estúdio (500×500). */

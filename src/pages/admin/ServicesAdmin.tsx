@@ -120,9 +120,9 @@ function ServiceDialog({ service, onClose, onChanged }: { service: ServiceRow | 
 
         <div>
           <span className="mb-1 block text-xs font-semibold text-ink-soft">Fotografia (opcional)</span>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {form.image_url && <img src={form.image_url} alt="" className="size-16 rounded-xl object-cover" />}
-            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => pickImage(e.target.files?.[0])} className="text-sm" />
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => pickImage(e.target.files?.[0])} className="min-w-0 flex-1 text-sm" />
             {form.image_url && (
               <Button variant="ghost" onClick={() => set('image_url', null)}>
                 Remover
@@ -188,13 +188,13 @@ export function ServicesAdmin() {
                       <button
                         type="button"
                         onClick={() => setEditing(s)}
-                        className="flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-3 text-left hover:bg-blush"
+                        className="flex w-full cursor-pointer flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 text-left hover:bg-blush"
                       >
                         <span className={s.active ? '' : 'text-ink-soft line-through'}>{s.name}</span>
-                        <span className="flex shrink-0 items-center gap-4 text-sm text-ink-soft">
+                        <span className="flex shrink-0 items-center gap-3 text-sm text-ink-soft sm:gap-4">
                           {!s.active && <span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs no-underline">Desativado</span>}
                           <span>{formatDuration(s.duration_minutes)}</span>
-                          <span className="w-20 text-right font-medium text-ink">{formatPrice(s.price_cents) ?? 'Consulte'}</span>
+                          <span className="text-right font-medium text-ink sm:w-20">{formatPrice(s.price_cents) ?? 'Consulte'}</span>
                         </span>
                       </button>
                     </li>

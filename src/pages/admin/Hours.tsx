@@ -61,15 +61,15 @@ function WeeklyHours() {
         {weekOrder.map((day) => {
           const dayPeriods = periods.map((p, index) => ({ ...p, index })).filter((p) => p.weekday === day)
           return (
-            <li key={day} className="flex flex-wrap items-start gap-x-4 gap-y-2 py-3">
-              <span className="w-24 pt-2.5 text-sm font-semibold">{weekdayNames[day]}</span>
-              <div className="flex-1 space-y-2">
+            <li key={day} className="grid grid-cols-[1fr_auto] items-start gap-x-3 gap-y-2 py-3 sm:flex sm:flex-wrap sm:gap-x-4">
+              <span className="pt-2.5 text-sm font-semibold sm:w-24">{weekdayNames[day]}</span>
+              <div className="col-span-2 row-start-2 space-y-2 sm:flex-1">
                 {dayPeriods.length === 0 && <p className="pt-2.5 text-sm text-ink-soft">Fechado</p>}
                 {dayPeriods.map((p) => (
                   <div key={p.index} className="flex items-center gap-2">
-                    <input type="time" aria-label={`${weekdayNames[day]}: abertura`} value={p.opens_at} onChange={(e) => update(p.index, { opens_at: e.target.value })} className={`${inputClass} w-32`} />
+                    <input type="time" aria-label={`${weekdayNames[day]}: abertura`} value={p.opens_at} onChange={(e) => update(p.index, { opens_at: e.target.value })} className={`${inputClass} min-w-0 flex-1 sm:w-32 sm:flex-none`} />
                     <span className="text-sm text-ink-soft">até</span>
-                    <input type="time" aria-label={`${weekdayNames[day]}: fechamento`} value={p.closes_at} onChange={(e) => update(p.index, { closes_at: e.target.value })} className={`${inputClass} w-32`} />
+                    <input type="time" aria-label={`${weekdayNames[day]}: fechamento`} value={p.closes_at} onChange={(e) => update(p.index, { closes_at: e.target.value })} className={`${inputClass} min-w-0 flex-1 sm:w-32 sm:flex-none`} />
                     <button
                       type="button"
                       aria-label="Remover período"
@@ -192,7 +192,7 @@ function Blocks() {
           <ul className="divide-y divide-petal/70 rounded-xl border border-petal/70 text-sm">
             {data.map((b) => (
               <li key={b.id} className="flex items-center justify-between gap-3 py-1 pr-1 pl-4">
-                <span>
+                <span className="min-w-0 py-2">
                   <strong>{kindLabels[b.kind]}</strong> · {describe(b)}
                   {b.reason && <span className="text-ink-soft"> · {b.reason}</span>}
                 </span>

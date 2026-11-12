@@ -43,14 +43,14 @@ export function Appointments() {
       <PageHeader title="Agendamentos" description="Todos os pedidos e atendimentos do período." />
 
       <Card className="mb-4">
-        <div className="grid gap-3 sm:grid-cols-[10rem_10rem_1fr]">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-[10rem_10rem_1fr]">
           <Field label="De">
             <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={inputClass} />
           </Field>
           <Field label="Até">
             <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={inputClass} />
           </Field>
-          <Field label="Buscar">
+          <Field label="Buscar" className="col-span-2 sm:col-span-1">
             <input type="search" placeholder="Cliente ou serviço" value={query} onChange={(e) => setQuery(e.target.value)} className={inputClass} />
           </Field>
         </div>
@@ -77,8 +77,44 @@ export function Appointments() {
       {!data && !error && <Loading />}
       {data && rows.length === 0 && valid && <Empty>Nenhum agendamento encontrado com esses filtros.</Empty>}
 
+      {/* Celular: cartões empilhados */}
       {rows.length > 0 && (
-        <Card className="overflow-x-auto p-0">
+        <ul className="space-y-2 sm:hidden">
+          {rows.map((a) => {
+            const day = dateOfInstant(a.starts_at)
+            return (
+              <li key={a.id}>
+                <button
+                  type="button"
+                  onClick={() => setSelected(a)}
+                  className="w-full cursor-pointer rounded-2xl border border-petal/70 bg-white p-3.5 text-left"
+                >
+                  <span className="flex items-start justify-between gap-2">
+                    <span className="text-sm font-semibold text-brand-dark">
+                      {formatShortDate(day)}/{day.slice(2, 4)} · {formatTime(a.starts_at)}
+                    </span>
+                    <StatusBadge status={a.status} suffix={holdExpired(a) ? ' · vencida' : undefined} />
+                  </span>
+                  <span className="mt-1 block font-medium">{a.client?.name ?? '—'}</span>
+                  <span className="flex items-end justify-between gap-2 text-sm text-ink-soft">
+                    <span>{a.service_name}</span>
+                    <span className="shrink-0 text-right text-ink">
+                      {formatPrice(a.price_cents) ?? '—'}
+                      {a.status === 'completed' && (
+                        <span className={cn('ml-1.5 text-xs', isPaid(a) ? 'text-emerald-700' : 'text-amber-700')}>{isPaid(a) ? 'pago' : 'a receber'}</span>
+                      )}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
+      {/* Telas maiores: tabela */}
+      {rows.length > 0 && (
+        <Card className="hidden overflow-x-auto p-0 sm:block">
           <table className="w-full min-w-[40rem] text-sm">
             <thead>
               <tr className="border-b border-petal/70 text-left text-xs text-ink-soft">

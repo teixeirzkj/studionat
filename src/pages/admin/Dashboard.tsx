@@ -29,8 +29,8 @@ function AppointmentRow({ appointment: a, onOpen }: { appointment: Appointment; 
           <span className="block font-medium">{a.client?.name ?? 'Cliente'}</span>
           <span className="text-sm text-ink-soft">{a.service_name}</span>
         </span>
-        <span className="flex items-center gap-3 text-sm">
-          <span className="text-right text-ink-soft first-letter:uppercase">
+        <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          <span className="text-ink-soft first-letter:uppercase sm:text-right">
             {formatLongDate(dateOfInstant(a.starts_at))}, {formatTime(a.starts_at)}
           </span>
           <StatusBadge status={a.status} suffix={holdExpired(a) ? ' · vencida' : undefined} />
@@ -134,7 +134,7 @@ export function Dashboard() {
 
       <section className="mt-10">
         <h2 className="mb-3 text-2xl font-medium">Agendamentos por dia — {formatMonth(today)}</h2>
-        <Card>
+        <Card className="overflow-x-auto">
           <BarChart data={perDay} format={(v) => `${v} agendamento${v === 1 ? '' : 's'}`} />
         </Card>
       </section>

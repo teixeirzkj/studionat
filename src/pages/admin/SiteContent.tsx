@@ -73,8 +73,8 @@ function Testimonials() {
         {data && data.length > 0 && (
           <ul className="divide-y divide-petal/70 rounded-xl border border-petal/70">
             {data.map((t) => (
-              <li key={t.id} className="flex items-center gap-3 py-2 pr-1 pl-4">
-                <p className="flex-1 text-sm">
+              <li key={t.id} className="flex flex-wrap items-center gap-x-3 py-2 pr-1 pl-4">
+                <p className="min-w-0 flex-1 basis-48 text-sm">
                   <strong>{t.client_name}</strong>
                   <span className="block text-ink-soft">{t.comment}</span>
                 </p>
@@ -149,10 +149,10 @@ function Gallery() {
       <p className="mb-4 text-sm text-ink-soft">Publique apenas fotos autorizadas pelas clientes. O "antes" é opcional e cria uma comparação antes/depois.</p>
       <div key={fileKey} className="grid gap-3 sm:grid-cols-2">
         <Field label="Foto do resultado (JPG, PNG ou WebP, até 5 MB)">
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} className="text-sm" />
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} className="block w-full min-w-0 text-sm" />
         </Field>
         <Field label="Foto do antes (opcional)">
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setBefore(e.target.files?.[0] ?? null)} className="text-sm" />
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setBefore(e.target.files?.[0] ?? null)} className="block w-full min-w-0 text-sm" />
         </Field>
         <Field label="Procedimento">
           <select value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass}>

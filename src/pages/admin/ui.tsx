@@ -20,9 +20,9 @@ export function Field({ label, children, className }: { label: string; children:
 
 export function PageHeader({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return (
-    <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:mb-7 sm:gap-4">
       <div>
-        <h1 className="text-4xl font-medium">{title}</h1>
+        <h1 className="text-3xl font-medium sm:text-4xl">{title}</h1>
         {description && <p className="mt-1 text-sm text-ink-soft">{description}</p>}
       </div>
       {action}
@@ -31,7 +31,7 @@ export function PageHeader({ title, description, action }: { title: string; desc
 }
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn('rounded-2xl border border-petal/70 bg-white p-5', className)}>{children}</div>
+  return <div className={cn('rounded-2xl border border-petal/70 bg-white p-4 sm:p-5', className)}>{children}</div>
 }
 
 const statTones = {
@@ -57,12 +57,12 @@ export function Stat({
   return (
     <Card className="flex items-start justify-between gap-3 shadow-[0_8px_30px_-22px_rgb(157_66_106/0.5)]">
       <div className="min-w-0">
-        <p className="text-xs font-semibold tracking-wide text-ink-soft uppercase">{label}</p>
-        <p className="mt-1 font-serif text-4xl text-ink">{value}</p>
+        <p className="text-[0.68rem] font-semibold tracking-wide text-ink-soft uppercase sm:text-xs">{label}</p>
+        <p className="mt-1 font-serif text-3xl text-ink sm:text-4xl">{value}</p>
         {hint && <p className="mt-1 text-xs text-ink-soft">{hint}</p>}
       </div>
       {Icon && (
-        <span className={cn('grid size-10 shrink-0 place-items-center rounded-xl', statTones[tone])}>
+        <span className={cn('hidden size-10 shrink-0 place-items-center rounded-xl min-[400px]:grid', statTones[tone])}>
           <Icon className="size-5" />
         </span>
       )}
@@ -129,7 +129,7 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
       )}
     >
       <div className="flex max-h-[92dvh] flex-col">
-        <header className="flex items-center justify-between gap-3 border-b border-petal/70 py-3 pr-3 pl-6">
+        <header className="flex items-center justify-between gap-3 border-b border-petal/70 py-2 pr-2 pl-4 sm:py-3 sm:pr-3 sm:pl-6">
           <h2 className="text-2xl font-medium">{title}</h2>
           <button
             type="button"
@@ -140,7 +140,7 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
             <X className="size-5" />
           </button>
         </header>
-        <div className="overflow-y-auto p-6">{children}</div>
+        <div className="overflow-y-auto p-4 sm:p-6">{children}</div>
       </div>
     </dialog>
   )

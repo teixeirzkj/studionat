@@ -46,7 +46,7 @@ function TimeGrid({
 }) {
   const today = todayInStudio()
   const hours = Array.from({ length: LAST_HOUR - FIRST_HOUR }, (_, i) => FIRST_HOUR + i)
-  const columns = `3rem repeat(${days.length}, minmax(${days.length > 1 ? '7.5rem' : '0'}, 1fr))`
+  const columns = `2.75rem repeat(${days.length}, minmax(${days.length > 1 ? '6.5rem' : '0'}, 1fr))`
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-petal/70 bg-white">
@@ -165,7 +165,8 @@ function MonthGrid({ anchor, items, onDay }: { anchor: string; items: Appointmen
 }
 
 export function Agenda() {
-  const [view, setView] = useState<View>('week')
+  // No celular a grade da semana não cabe: começa pela visão do dia.
+  const [view, setView] = useState<View>(() => (window.innerWidth < 640 ? 'day' : 'week'))
   const [anchor, setAnchor] = useState(todayInStudio())
   const [selected, setSelected] = useState<Appointment | null>(null)
 
@@ -193,7 +194,7 @@ export function Agenda() {
       <PageHeader title="Agenda" />
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <button type="button" onClick={() => step(-1)} aria-label="Anterior" className="grid size-11 cursor-pointer place-items-center rounded-full hover:bg-white">
             <ChevronLeft className="size-5" />
           </button>
@@ -203,7 +204,7 @@ export function Agenda() {
           <Button variant="secondary" onClick={() => setAnchor(todayInStudio())}>
             Hoje
           </Button>
-          <p className="ml-2 font-serif text-2xl first-letter:uppercase">{title}</p>
+          <p className="ml-2 font-serif text-xl first-letter:uppercase max-sm:order-first max-sm:ml-0 max-sm:w-full sm:text-2xl">{title}</p>
         </div>
         <div role="group" aria-label="Visualização" className="flex rounded-full bg-white p-1">
           {views.map(([key, label]) => (
