@@ -6,7 +6,7 @@ export function Logo() {
   return (
     <a href="/#inicio" aria-label={`${site.name} — início`} className="inline-flex items-center gap-2.5">
       {site.images.logo ? (
-        <img src={site.images.logo} alt={site.name} className="h-10 w-auto" />
+        <img src={site.images.logo} alt={site.name} width={405} height={220} className="h-14 w-auto" />
       ) : (
         <>
           <LotusIcon className="h-7 w-auto text-brand-dark" />

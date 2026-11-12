@@ -16,8 +16,14 @@ export function Footer({ hours = site.hours }: { hours?: BusinessHours[] }) {
     <footer id="contato" className="bg-ink text-white/75">
       <Container className="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="text-[0.6rem] font-semibold tracking-[0.42em] text-petal uppercase">Studio</p>
-          <p className="font-serif text-3xl text-white italic">{site.shortName}</p>
+          {site.images.logoLight ? (
+            <img src={site.images.logoLight} alt={site.name} width={404} height={220} loading="lazy" className="h-24 w-auto" />
+          ) : (
+            <>
+              <p className="text-[0.6rem] font-semibold tracking-[0.42em] text-petal uppercase">Studio</p>
+              <p className="font-serif text-3xl text-white italic">{site.shortName}</p>
+            </>
+          )}
           <p className="mt-4 text-sm leading-relaxed">{site.specialties.join(' · ')}</p>
         </div>
 

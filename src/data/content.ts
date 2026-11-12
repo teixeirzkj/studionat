@@ -30,6 +30,12 @@ const slug = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
+/**
+ * Serviços que já têm foto em /public/images/servicos/<slug>.jpg.
+ * (No banco, a foto de cada serviço fica na coluna `image_url` e é trocada pelo painel.)
+ */
+const serviceImages = new Set(['design-com-henna', 'design-com-tintura', 'design-simples-personalizado'])
+
 /** [nome, duração em minutos, preço em reais] */
 type Row = [name: string, minutes: number, reais: number]
 
@@ -41,7 +47,7 @@ const fromRows = (category: ServiceCategory, rows: Row[]): Service[] =>
     description: '',
     priceCents: reais * 100,
     durationMinutes: minutes,
-    imageUrl: null,
+    imageUrl: serviceImages.has(slug(name)) ? `/images/servicos/${slug(name)}.jpg` : null,
     active: true,
   }))
 

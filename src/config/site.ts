@@ -49,7 +49,9 @@ export const site = {
 
   /** Fotos oficiais ficam em /public/images. `null` = fundo decorativo da marca. */
   images: {
-    logo: null as string | null, // ex.: '/images/logo.svg'
+    /** Logo enviada pelo cliente em 12/11/2026 (lótus + nome), em rosa e em branco. */
+    logo: '/images/logo.png' as string | null,
+    logoLight: '/images/logo-branca.png' as string | null,
     /** Imagem ilustrativa do ambiente (gerada por IA, enviada pelo cliente em 12/11/2026). */
     hero: '/images/hero.jpg' as string | null,
     /** Imagem ilustrativa do ambiente para a seção "Sobre". */
