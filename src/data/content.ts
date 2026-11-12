@@ -34,7 +34,13 @@ const slug = (text: string) =>
  * Serviços que já têm foto em /public/images/servicos/<slug>.jpg.
  * (No banco, a foto de cada serviço fica na coluna `image_url` e é trocada pelo painel.)
  */
-const serviceImages = new Set(['design-com-henna', 'design-com-tintura', 'design-simples-personalizado'])
+const serviceImages = new Set([
+  'design-com-henna',
+  'design-com-tintura',
+  'design-simples-personalizado',
+  'barba-design',
+  'epilacao-abdomen-peitoral',
+])
 
 /** [nome, duração em minutos, preço em reais] */
 type Row = [name: string, minutes: number, reais: number]

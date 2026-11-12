@@ -7,14 +7,14 @@ import { categoryLabels, categoryOrder } from '@/data/content'
 import { cn, formatDuration, formatPrice } from '@/lib/format'
 import type { Service, ServiceCategory } from '@/types'
 
-function ServiceCard({ service }: { service: Service }) {
+function ServiceCard({ service, withImage }: { service: Service; withImage: boolean }) {
   const price = formatPrice(service.priceCents)
   const duration = formatDuration(service.durationMinutes)
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-petal/70 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-soft">
-      {/* A foto só ocupa espaço quando o serviço tem imagem cadastrada no painel. */}
-      {service.imageUrl && (
+      {/* Se algum serviço da categoria tem foto, todos os cards reservam o espaço (os sem foto mostram o fundo da marca), para a grade ficar alinhada. */}
+      {withImage && (
         <div className="aspect-[4/3] overflow-hidden">
           <ImageSlot src={service.imageUrl} alt={service.name} className="transition duration-500 group-hover:scale-105" />
         </div>
@@ -48,6 +48,7 @@ export function Services({ services, loading = false }: { services: Service[]; l
   const [selected, setSelected] = useState<ServiceCategory | null>(null)
   const category = selected && categories.includes(selected) ? selected : categories[0]
   const visible = active.filter((s) => s.category === category)
+  const withImage = visible.some((s) => s.imageUrl)
 
   return (
     <Section id="servicos" tinted>
@@ -88,7 +89,7 @@ export function Services({ services, loading = false }: { services: Service[]; l
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite">
         {visible.map((service) => (
           <li key={service.id}>
-            <ServiceCard service={service} />
+            <ServiceCard service={service} withImage={withImage} />
           </li>
         ))}
       </ul>
