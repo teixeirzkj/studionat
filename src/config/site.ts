@@ -50,7 +50,10 @@ export const site = {
   /** Fotos oficiais ficam em /public/images. `null` = fundo decorativo da marca. */
   images: {
     logo: null as string | null, // ex.: '/images/logo.svg'
-    hero: null as string | null, // ex.: '/images/hero.jpg'
+    /** Imagem ilustrativa do ambiente (gerada por IA, enviada pelo cliente em 12/11/2026). */
+    hero: '/images/hero.jpg' as string | null,
+    /** Imagem ilustrativa do ambiente para a seção "Sobre". */
+    studio: '/images/sobre-estudio.jpg' as string | null,
     /** Foto de perfil da página de agendamento do estúdio (500×500). */
     owner: '/images/natalli.jpg' as string | null,
   },

@@ -32,7 +32,7 @@ export function Hero() {
 
         <div className="relative mx-auto w-full max-w-md lg:max-w-none">
           <div className="aspect-[4/5] overflow-hidden rounded-t-full rounded-b-3xl shadow-soft">
-            <ImageSlot src={site.images.hero} alt={`Ambiente do ${site.name}`} priority />
+            <ImageSlot src={site.images.hero} alt={`Sala de atendimento em tons de rosa, com maca e a marca ${site.name} na parede`} priority />
           </div>
           <div className="absolute -bottom-5 -left-3 rounded-2xl bg-white px-5 py-4 shadow-soft sm:-left-8">
             <p className="font-serif text-xl text-ink italic">{site.name}</p>

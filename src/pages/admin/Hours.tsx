@@ -218,7 +218,7 @@ const rules = [
   ['max_advance_days', 'Agenda aberta até (dias)', 'Quantos dias à frente o site aceita pedidos.'],
 ] as const
 
-function BookingRules() {
+export function BookingRules() {
   const load = useLoad(async () => {
     const { data, error } = await db().from('settings').select('key, value').in('key', rules.map(([key]) => key))
     if (error) throw error
@@ -277,10 +277,6 @@ export function Hours() {
         <section>
           <h2 className="mb-3 text-2xl font-medium">Folgas, feriados e bloqueios</h2>
           <Blocks />
-        </section>
-        <section>
-          <h2 className="mb-3 text-2xl font-medium">Regras de agendamento</h2>
-          <BookingRules />
         </section>
       </div>
     </>

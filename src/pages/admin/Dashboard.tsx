@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CalendarCheck, CalendarDays, CalendarRange, CalendarX, Hourglass, Sun, Wallet } from 'lucide-react'
 import {
   addDays,
   addMonths,
@@ -82,20 +83,21 @@ export function Dashboard() {
 
   return (
     <>
-      <PageHeader title="Visão geral" description={`Hoje é ${formatLongDate(today)}.`} />
+      <PageHeader title="Dashboard" description={`Hoje é ${formatLongDate(today)}.`} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Hoje" value={todayCount} hint="agendamentos" />
-        <Stat label="Esta semana" value={weekCount} hint="agendamentos" />
-        <Stat label="Este mês" value={monthCount} hint="agendamentos" />
-        <Stat label="Pendentes" value={pendingLoad.data.length} hint="aguardando resposta" />
-        <Stat label="Confirmados" value={upcoming.length} hint="próximos atendimentos" />
-        <Stat label="Cancelamentos" value={cancelled} hint="no mês, com faltas" />
+        <Stat label="Hoje" value={todayCount} hint="agendamentos" icon={Sun} />
+        <Stat label="Esta semana" value={weekCount} hint="agendamentos" icon={CalendarRange} />
+        <Stat label="Este mês" value={monthCount} hint="agendamentos" icon={CalendarDays} />
+        <Stat label="Pendentes" value={pendingLoad.data.length} hint="aguardando resposta" icon={Hourglass} tone="amber" />
+        <Stat label="Confirmados" value={upcoming.length} hint="próximos atendimentos" icon={CalendarCheck} tone="emerald" />
+        <Stat label="Cancelamentos" value={cancelled} hint="no mês, com faltas" icon={CalendarX} tone="slate" />
         <div className="col-span-2">
           <Stat
             label="Faturamento estimado do mês"
             value={formatPrice(estimated)}
             hint="Confirmados + realizados. Valores efetivamente recebidos ficam em Financeiro."
+            icon={Wallet}
           />
         </div>
       </div>

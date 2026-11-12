@@ -18,10 +18,24 @@ export function About() {
   return (
     <Section id="sobre">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-        <Reveal className="mx-auto w-full max-w-sm lg:max-w-md">
-          <div className="aspect-square overflow-hidden rounded-3xl shadow-soft">
-            <ImageSlot src={site.images.owner} alt="Natalli Anjos, proprietária do estúdio" />
-          </div>
+        <Reveal className="relative mx-auto w-full max-w-sm pb-10 lg:max-w-md">
+          {site.images.studio ? (
+            <>
+              <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-soft">
+                <ImageSlot src={site.images.studio} alt="Ambiente do estúdio em tons de rosa" />
+              </div>
+              {/* Retrato da proprietária sobreposto ao canto da foto do ambiente */}
+              {site.images.owner && (
+                <div className="absolute right-[-0.75rem] bottom-0 size-36 overflow-hidden rounded-3xl border-4 border-white shadow-soft sm:right-[-1.5rem] sm:size-44">
+                  <ImageSlot src={site.images.owner} alt="Natalli Anjos, proprietária do estúdio" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="aspect-square overflow-hidden rounded-3xl shadow-soft">
+              <ImageSlot src={site.images.owner} alt="Natalli Anjos, proprietária do estúdio" />
+            </div>
+          )}
         </Reveal>
 
         <Reveal delay={120}>

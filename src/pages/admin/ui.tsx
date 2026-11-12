@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type ComponentType, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/format'
 import type { AppointmentStatus } from '@/types'
@@ -34,12 +34,38 @@ export function Card({ children, className }: { children: ReactNode; className?:
   return <div className={cn('rounded-2xl border border-petal/70 bg-white p-5', className)}>{children}</div>
 }
 
-export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
+const statTones = {
+  rose: 'bg-petal/70 text-brand-dark',
+  amber: 'bg-amber-100 text-amber-800',
+  emerald: 'bg-emerald-100 text-emerald-800',
+  slate: 'bg-slate-100 text-slate-700',
+}
+
+export function Stat({
+  label,
+  value,
+  hint,
+  icon: Icon,
+  tone = 'rose',
+}: {
+  label: string
+  value: ReactNode
+  hint?: string
+  icon?: ComponentType<{ className?: string }>
+  tone?: keyof typeof statTones
+}) {
   return (
-    <Card>
-      <p className="text-xs font-semibold tracking-wide text-ink-soft uppercase">{label}</p>
-      <p className="mt-1 font-serif text-4xl text-ink">{value}</p>
-      {hint && <p className="mt-1 text-xs text-ink-soft">{hint}</p>}
+    <Card className="flex items-start justify-between gap-3 shadow-[0_8px_30px_-22px_rgb(157_66_106/0.5)]">
+      <div className="min-w-0">
+        <p className="text-xs font-semibold tracking-wide text-ink-soft uppercase">{label}</p>
+        <p className="mt-1 font-serif text-4xl text-ink">{value}</p>
+        {hint && <p className="mt-1 text-xs text-ink-soft">{hint}</p>}
+      </div>
+      {Icon && (
+        <span className={cn('grid size-10 shrink-0 place-items-center rounded-xl', statTones[tone])}>
+          <Icon className="size-5" />
+        </span>
+      )}
     </Card>
   )
 }

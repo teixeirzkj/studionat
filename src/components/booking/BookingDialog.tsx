@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, CalendarCheck, Clock, X } from 'lucide-react'
+import { ArrowLeft, CalendarCheck, ChevronLeft, ChevronRight, Clock, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { WhatsAppIcon } from '@/components/ui/icons'
 import { site } from '@/config/site'
@@ -14,7 +14,18 @@ import {
   type BookingConfig,
 } from '@/lib/api'
 import { whatsappUrl } from '@/lib/booking'
-import { addDays, dayParts, formatLongDate, formatTime, hourOf, todayInStudio, weekdayOf } from '@/lib/datetime'
+import {
+  addDays,
+  addMonths,
+  formatLongDate,
+  formatMonth,
+  formatTime,
+  hourOf,
+  monthStart,
+  todayInStudio,
+  weekdayOf,
+  weekStart,
+} from '@/lib/datetime'
 import { cn, formatDuration, formatPrice } from '@/lib/format'
 import type { Service } from '@/types'
 
@@ -96,6 +107,92 @@ function ServiceStep({ services, onSelect }: { services: Service[]; onSelect: (s
 /* ------------------------------------------------------------------ */
 /* Passo 2 — dia e horário                                             */
 /* ------------------------------------------------------------------ */
+
+/** Dias em que o site aceita pedidos: de hoje até o limite configurado, só nos dias com expediente. */
+function bookableDays(config: BookingConfig) {
+  const today = todayInStudio()
+  return Array.from({ length: config.maxAdvanceDays + 1 }, (_, i) => addDays(today, i)).filter((d) =>
+    config.openWeekdays.has(weekdayOf(d)),
+  )
+}
+
+const weekdayInitials = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+
+/** Calendário mensal: dias sem expediente, passados ou além do limite ficam desabilitados. */
+function MonthCalendar({ config, date, onDate }: { config: BookingConfig; date: string | null; onDate: (date: string) => void }) {
+  const today = todayInStudio()
+  const available = useMemo(() => new Set(bookableDays(config)), [config])
+  const firstMonth = monthStart(today)
+  const lastMonth = monthStart(addDays(today, config.maxAdvanceDays))
+  const [month, setMonth] = useState(monthStart(date ?? today))
+
+  const gridStart = weekStart(month)
+  const weeks = Math.ceil(Math.round((Date.parse(addMonths(month, 1)) - Date.parse(gridStart)) / 86400000) / 7)
+  const cells = Array.from({ length: weeks * 7 }, (_, i) => addDays(gridStart, i))
+  const navButton =
+    'grid size-10 cursor-pointer place-items-center rounded-full text-brand-dark transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-25 disabled:hover:bg-transparent'
+
+  return (
+    <div className="rounded-3xl bg-blush p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <button type="button" aria-label="Mês anterior" disabled={month <= firstMonth} onClick={() => setMonth(addMonths(month, -1))} className={navButton}>
+          <ChevronLeft className="size-5" />
+        </button>
+        <p aria-live="polite" className="font-serif text-xl first-letter:uppercase">
+          {formatMonth(month)}
+        </p>
+        <button type="button" aria-label="Próximo mês" disabled={month >= lastMonth} onClick={() => setMonth(addMonths(month, 1))} className={navButton}>
+          <ChevronRight className="size-5" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 text-center" aria-hidden="true">
+        {weekdayInitials.map((initial, i) => (
+          <span key={i} className="pb-2 text-[0.7rem] font-semibold tracking-wider text-ink-soft">
+            {initial}
+          </span>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-y-1" role="group" aria-label="Escolha o dia">
+        {cells.map((day) => {
+          if (day.slice(0, 7) !== month.slice(0, 7)) return <span key={day} />
+          const enabled = available.has(day)
+          const selected = day === date
+          return (
+            <button
+              key={day}
+              type="button"
+              disabled={!enabled}
+              aria-pressed={selected}
+              aria-label={`${formatLongDate(day)}${enabled ? '' : ' — indisponível'}`}
+              onClick={() => onDate(day)}
+              className={cn(
+                'relative mx-auto grid size-10 place-items-center rounded-full text-sm transition',
+                selected && 'bg-brand-dark font-semibold text-white shadow-soft',
+                !selected && enabled && 'cursor-pointer bg-white font-medium text-ink hover:bg-petal',
+                !enabled && 'text-ink-soft/35',
+              )}
+            >
+              {Number(day.slice(8))}
+              {day === today && <span className={cn('absolute bottom-1 size-1 rounded-full', selected ? 'bg-white' : 'bg-brand')} />}
+            </button>
+          )
+        })}
+      </div>
+
+      <p className="mt-3 flex items-center justify-center gap-4 text-[0.7rem] text-ink-soft">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full border border-petal bg-white" /> Disponível
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full bg-brand-dark" /> Selecionado
+        </span>
+      </p>
+    </div>
+  )
+}
+
 function DateTimeStep({
   service,
   config,
@@ -111,13 +208,6 @@ function DateTimeStep({
   onSlot: (slot: string) => void
   notice: string | null
 }) {
-  const days = useMemo(() => {
-    const today = todayInStudio()
-    return Array.from({ length: config.maxAdvanceDays + 1 }, (_, i) => addDays(today, i)).filter((d) =>
-      config.openWeekdays.has(weekdayOf(d)),
-    )
-  }, [config])
-
   const [slots, setSlots] = useState<string[] | null>(null)
   const [error, setError] = useState(false)
   const [reload, setReload] = useState(0)
@@ -142,40 +232,15 @@ function DateTimeStep({
   ].filter((p) => p.items.length > 0)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {notice && <ErrorNote>{notice}</ErrorNote>}
 
-      <div>
-        <h3 className="mb-3 font-sans text-sm font-semibold">Dia</h3>
-        <ul className="-mx-5 flex snap-x gap-2 overflow-x-auto px-5 pb-2 sm:-mx-7 sm:px-7" aria-label="Dias disponíveis">
-          {days.map((d) => {
-            const parts = dayParts(d)
-            const selected = d === date
-            return (
-              <li key={d} className="snap-start">
-                <button
-                  type="button"
-                  aria-pressed={selected}
-                  aria-label={formatLongDate(d)}
-                  onClick={() => onDate(d)}
-                  className={cn(
-                    'flex w-16 cursor-pointer flex-col items-center rounded-2xl border py-2.5 transition',
-                    selected ? 'border-brand-dark bg-brand-dark text-white' : 'border-petal bg-white hover:bg-blush',
-                  )}
-                >
-                  <span className="text-xs capitalize opacity-80">{parts.weekday}</span>
-                  <span className="font-serif text-2xl leading-tight">{parts.day}</span>
-                  <span className="text-xs opacity-80">{parts.month}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
+      <div className="grid gap-6 sm:grid-cols-[19rem_1fr] sm:gap-7">
+      <MonthCalendar config={config} date={date} onDate={onDate} />
 
-      <div aria-live="polite">
-        <h3 className="mb-3 font-sans text-sm font-semibold">Horário</h3>
-        {!date && <p className="text-sm text-ink-soft">Escolha um dia para ver os horários livres.</p>}
+      <div aria-live="polite" className="sm:max-h-[22.5rem] sm:overflow-y-auto sm:pr-1">
+        <h3 className="mb-3 font-serif text-xl first-letter:uppercase">{date ? formatLongDate(date) : 'Horários'}</h3>
+        {!date && <p className="text-sm text-ink-soft">Escolha um dia no calendário para ver os horários livres.</p>}
         {date && error && (
           <div className="space-y-3">
             <ErrorNote>Não foi possível carregar os horários. Verifique a conexão.</ErrorNote>
@@ -193,13 +258,13 @@ function DateTimeStep({
         {periods.map((period) => (
           <div key={period.label} className="mb-5">
             <p className="mb-2 text-xs font-semibold tracking-[0.18em] text-ink-soft uppercase">{period.label}</p>
-            <ul className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+            <ul className="grid grid-cols-4 gap-2 sm:grid-cols-3">
               {period.items.map((slot) => (
                 <li key={slot}>
                   <button
                     type="button"
                     onClick={() => onSlot(slot)}
-                    className="min-h-11 w-full cursor-pointer rounded-full border border-petal bg-white text-sm font-medium transition hover:border-brand-dark hover:bg-brand-dark hover:text-white"
+                    className="min-h-11 w-full cursor-pointer rounded-xl border border-petal bg-white text-sm font-medium transition hover:border-brand-dark hover:bg-brand-dark hover:text-white"
                   >
                     {formatTime(slot)}
                   </button>
@@ -208,6 +273,7 @@ function DateTimeStep({
             </ul>
           </div>
         ))}
+      </div>
       </div>
     </div>
   )
@@ -274,7 +340,11 @@ export default function BookingDialog({ services, initialService, onClose }: Pro
 
   useEffect(() => {
     fetchBookingConfig()
-      .then(setConfig)
+      .then((loaded) => {
+        setConfig(loaded)
+        // Já abre no primeiro dia com expediente, mostrando os horários sem um clique a mais.
+        setDate((current) => current ?? bookableDays(loaded)[0] ?? null)
+      })
       .catch(() => setConfigError(true))
   }, [])
 
@@ -336,9 +406,13 @@ export default function BookingDialog({ services, initialService, onClose }: Pro
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
-      className="m-0 h-dvh max-h-none w-screen max-w-none bg-white p-0 text-ink backdrop:bg-ink/70 sm:m-auto sm:h-auto sm:max-h-[min(46rem,92dvh)] sm:w-[34rem] sm:rounded-3xl"
+      className={cn(
+        'm-0 max-h-none w-screen max-w-none bg-white p-0 text-ink backdrop:bg-ink/70 max-sm:h-dvh sm:m-auto sm:max-h-[min(46rem,92dvh)] sm:rounded-3xl',
+        // O passo do calendário usa duas colunas (calendário + horários) em telas maiores.
+        step === 'datetime' ? 'sm:w-[44rem]' : 'sm:w-[34rem]',
+      )}
     >
-      <div className="flex h-dvh flex-col sm:h-auto sm:max-h-[min(46rem,92dvh)]">
+      <div className="flex flex-col max-sm:h-dvh sm:max-h-[min(46rem,92dvh)]">
         <header className="flex items-center gap-2 border-b border-petal/70 px-3 py-3 sm:px-5">
           {canGoBack ? (
             <button
