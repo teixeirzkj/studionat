@@ -1,17 +1,34 @@
 import { useEffect, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { CalendarDays, Clock, Image, LayoutDashboard, LogOut, Sparkles, Users, Wallet } from 'lucide-react'
+import { Link, NavLink, Route, Routes } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/format'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
+import { Agenda } from './Agenda'
+import { Clients } from './Clients'
+import { Dashboard } from './Dashboard'
+import { Finance } from './Finance'
+import { Hours } from './Hours'
 import { Login } from './Login'
-import { Requests } from './Requests'
+import { ServicesAdmin } from './ServicesAdmin'
+import { SiteContent } from './SiteContent'
 import { useAdminSession } from './useAdminSession'
 
 /**
- * Painel administrativo (rota /admin).
- *
- * Hoje: login seguro e tela de solicitações (confirmar, recusar, cancelar).
- * Etapa 4: dashboard, calendário, clientes, serviços, horários e financeiro.
+ * Painel administrativo (rota /admin). Só carrega depois do login de uma
+ * conta cadastrada como administradora; os dados em si são protegidos pelo
+ * RLS do banco, não por esta tela.
  */
+
+const navigation = [
+  { to: '/admin', label: 'Visão geral', icon: LayoutDashboard, end: true },
+  { to: '/admin/agenda', label: 'Agenda', icon: CalendarDays },
+  { to: '/admin/clientes', label: 'Clientes', icon: Users },
+  { to: '/admin/servicos', label: 'Serviços', icon: Sparkles },
+  { to: '/admin/horarios', label: 'Horários', icon: Clock },
+  { to: '/admin/financeiro', label: 'Financeiro', icon: Wallet },
+  { to: '/admin/site', label: 'Site', icon: Image },
+]
 
 function Notice({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -73,23 +90,60 @@ export default function AdminApp() {
   }
 
   return (
-    <div className="min-h-screen bg-blush">
-      <header className="border-b border-petal bg-white">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-4">
+    <div className="min-h-screen bg-blush lg:grid lg:grid-cols-[15rem_1fr]">
+      <aside className="border-b border-petal bg-white lg:sticky lg:top-0 lg:h-screen lg:border-r lg:border-b-0">
+        <div className="flex items-center justify-between px-5 pt-4 lg:block lg:pt-6">
           <div>
             <p className="text-[0.6rem] font-semibold tracking-[0.42em] text-brand-dark uppercase">Painel</p>
             <p className="font-serif text-2xl italic">Natalli Anjos</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-ink-soft sm:inline">{state.session.user.email}</span>
-            <Button variant="secondary" onClick={signOut}>
-              Sair
+          <button type="button" onClick={signOut} aria-label="Sair" className="grid size-11 cursor-pointer place-items-center rounded-full hover:bg-blush lg:hidden">
+            <LogOut className="size-5" />
+          </button>
+        </div>
+
+        <nav aria-label="Painel" className="flex gap-1 overflow-x-auto px-3 py-3 lg:mt-4 lg:flex-col lg:overflow-visible">
+          {navigation.map(({ to, label, icon: Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className={({ isActive }) =>
+                cn(
+                  'flex min-h-11 shrink-0 items-center gap-2.5 rounded-xl px-3.5 text-sm whitespace-nowrap transition',
+                  isActive ? 'bg-brand-dark font-medium text-white' : 'text-ink-soft hover:bg-blush hover:text-ink',
+                )
+              }
+            >
+              <Icon className="size-4" /> {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="hidden px-5 lg:absolute lg:inset-x-0 lg:bottom-5 lg:block">
+          <p className="truncate text-xs text-ink-soft">{state.session.user.email}</p>
+          <div className="mt-2 flex items-center justify-between">
+            <Link to="/" className="text-sm text-brand-dark underline underline-offset-4">
+              Ver o site
+            </Link>
+            <Button variant="ghost" onClick={signOut}>
+              <LogOut className="size-4" /> Sair
             </Button>
           </div>
         </div>
-      </header>
-      <main className="mx-auto max-w-4xl px-5 py-10">
-        <Requests />
+      </aside>
+
+      <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-8">
+        <Routes>
+          <Route index element={<Dashboard />} />
+          <Route path="agenda" element={<Agenda />} />
+          <Route path="clientes" element={<Clients />} />
+          <Route path="servicos" element={<ServicesAdmin />} />
+          <Route path="horarios" element={<Hours />} />
+          <Route path="financeiro" element={<Finance />} />
+          <Route path="site" element={<SiteContent />} />
+          <Route path="*" element={<Dashboard />} />
+        </Routes>
       </main>
     </div>
   )

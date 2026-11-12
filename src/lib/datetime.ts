@@ -43,3 +43,38 @@ export const formatTime = (iso: string) => time.format(new Date(iso))
 
 /** Hora (0–23) no estúdio — usada para agrupar manhã / tarde / noite. */
 export const hourOf = (iso: string) => Number(hour.format(new Date(iso)))
+
+/** Minutos desde a meia-noite, no estúdio. */
+export const minutesOfDay = (iso: string) => hourOf(iso) * 60 + Number(formatTime(iso).split(':')[1])
+
+const wallClock = new Intl.DateTimeFormat('sv-SE', { timeZone: STUDIO_TZ, dateStyle: 'short', timeStyle: 'medium' })
+
+/** Dia + hora do estúdio ("2026-11-17", "14:30") → instante ISO em UTC. */
+export function studioToIso(date: string, time: string) {
+  const guess = new Date(`${date}T${time.slice(0, 5)}:00Z`)
+  const shown = new Date(`${wallClock.format(guess).replace(' ', 'T')}Z`)
+  return new Date(guess.getTime() - (shown.getTime() - guess.getTime())).toISOString()
+}
+
+/** Início do dia (00:00 no estúdio) como instante ISO. */
+export const startOfDayIso = (date: string) => studioToIso(date, '00:00')
+
+/** Primeiro dia do mês de uma data. */
+export const monthStart = (date: string) => `${date.slice(0, 7)}-01`
+
+/** Primeiro dia do mês, `months` meses à frente (ou atrás, se negativo). */
+export function addMonths(date: string, months: number) {
+  const d = noonUtc(monthStart(date))
+  d.setUTCMonth(d.getUTCMonth() + months)
+  return d.toISOString().slice(0, 10)
+}
+
+/** Domingo da semana de uma data. */
+export const weekStart = (date: string) => addDays(date, -weekdayOf(date))
+
+/** "17/11" */
+export const formatShortDate = (date: string) => `${date.slice(8, 10)}/${date.slice(5, 7)}`
+
+/** "novembro de 2026" */
+export const formatMonth = (date: string) =>
+  new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(noonUtc(date))

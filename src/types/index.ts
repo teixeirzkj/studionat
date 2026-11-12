@@ -50,4 +50,4 @@ export interface BusinessHours {
   periods: TimePeriod[]
 }
 
-export type AppointmentStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled' | 'completed' | 'no_show'
+export type AppointmentStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled' | 'completed' | 'no_show' | 'expired'

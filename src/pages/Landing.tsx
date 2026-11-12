@@ -13,7 +13,7 @@ import { Testimonials } from '@/components/sections/Testimonials'
 import { useSiteContent } from '@/hooks/useSiteContent'
 
 export default function Landing() {
-  const { services, gallery, testimonials, faq, loading } = useSiteContent()
+  const { services, hours, gallery, testimonials, faq, loading } = useSiteContent()
 
   const nav: NavItem[] = [
     { label: 'Sobre', href: '/#sobre' },
@@ -42,7 +42,7 @@ export default function Landing() {
         <BookingCta />
         <Faq items={faq} />
       </main>
-      <Footer />
+      <Footer hours={hours} />
       <WhatsAppFloat />
       <ConsentBanner />
     </BookingProvider>

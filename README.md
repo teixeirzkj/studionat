@@ -34,7 +34,7 @@ src/
     sections/           Hero, Sobre, Serviços, Galeria, Depoimentos, Agendamento, FAQ
     booking/            Assistente de agendamento (procedimento → dia e horário → dados)
   pages/                Landing, Política de privacidade, 404
-  pages/admin/          Login, sessão e tela de solicitações
+  pages/admin/          Painel: login, visão geral, agenda, clientes, serviços, horários, financeiro, site
 supabase/
   migrations/           Esquema, carga inicial e armazenamento
   setup.sql             Os três arquivos juntos, para colar no SQL Editor
@@ -54,7 +54,7 @@ Serviços, preços, durações, expediente e a foto de perfil foram copiados da 
 
 ## Banco de dados (Supabase)
 
-O esquema fica em `supabase/migrations/` (tabelas, Row Level Security e funções de agendamento). `supabase/setup.sql` é a junção dos três arquivos, para colar de uma vez.
+O esquema fica em `supabase/migrations/` (tabelas, Row Level Security e funções de agendamento). `supabase/setup.sql` é a junção de todos os arquivos, para colar de uma vez.
 
 1. **Criar o banco:** no painel do Supabase, abra *SQL Editor*, cole o conteúdo de `supabase/setup.sql` e clique em *Run*.
 2. **Conectar o site:** em `.env.local` (e nas variáveis de ambiente da Vercel) preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` com a chave publicável (`sb_publishable_…`). Nunca use a chave secreta no site.
@@ -79,8 +79,8 @@ Como o agendamento se protege:
 - [x] **Etapa 1** — Estrutura, identidade visual e landing page
 - [x] **Etapa 2** — Fluxo de agendamento online
 - [x] **Etapa 3** — Banco de dados (Supabase), autenticação e RLS
-- [ ] **Etapa 4** — Painel administrativo e calendário (hoje: login e tela de solicitações)
-- [ ] **Etapa 5** — Integração site ↔ agenda ↔ banco (hoje: serviços e agendamento; faltam galeria, depoimentos e horários do rodapé)
+- [x] **Etapa 4** — Painel administrativo: visão geral, agenda (dia/semana/mês), clientes, serviços, horários, financeiro e conteúdo do site
+- [x] **Etapa 5** — Integração site ↔ agenda ↔ banco: serviços, expediente, galeria, depoimentos e agendamento vêm do banco
 - [ ] **Etapa 6** — Automações de WhatsApp
 - [ ] **Etapa 7** — Testes, segurança e publicação final
 

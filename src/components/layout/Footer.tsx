@@ -6,10 +6,12 @@ import { fullAddress, mapsUrl, site } from '@/config/site'
 import { track } from '@/lib/analytics'
 import { whatsappUrl } from '@/lib/booking'
 import { weekdayNames } from '@/lib/format'
+import type { BusinessHours } from '@/types'
 
 const linkClass = 'transition hover:text-white'
 
-export function Footer() {
+/** `hours` vem do banco quando conectado; sem ele, usa o expediente de `site.ts`. */
+export function Footer({ hours = site.hours }: { hours?: BusinessHours[] }) {
   return (
     <footer id="contato" className="bg-ink text-white/75">
       <Container className="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
@@ -51,9 +53,9 @@ export function Footer() {
 
         <div>
           <h2 className="mb-4 font-sans text-xs font-semibold tracking-[0.2em] text-white uppercase">Horários</h2>
-          {site.hours.length > 0 ? (
+          {hours.length > 0 ? (
             <ul className="space-y-1.5 text-sm">
-              {site.hours.map((h) => (
+              {hours.map((h) => (
                 <li key={h.weekday} className="flex justify-between gap-4">
                   <span>{weekdayNames[h.weekday]}</span>
                   <span className="text-right">

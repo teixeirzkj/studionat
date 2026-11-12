@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import type { Service, ServiceCategory } from '@/types'
+import type { BusinessHours, GalleryItem, Service, ServiceCategory, Testimonial } from '@/types'
 
 /**
  * Acesso ao banco usado pelo site público. Tudo aqui roda com a chave pública:
@@ -40,6 +40,52 @@ export async function fetchServices(): Promise<Service[]> {
     durationMinutes: row.duration_minutes,
     imageUrl: row.image_url,
     active: row.active,
+  }))
+}
+
+export async function fetchBusinessHours(): Promise<BusinessHours[]> {
+  const { data, error } = await client().from('business_hours').select('weekday, opens_at, closes_at').order('opens_at')
+  if (error) throw error
+  const rows = data as { weekday: BusinessHours['weekday']; opens_at: string; closes_at: string }[]
+  // Segunda a domingo; dias sem períodos aparecem como "Fechado".
+  return ([1, 2, 3, 4, 5, 6, 0] as const).map((weekday) => ({
+    weekday,
+    periods: rows
+      .filter((r) => r.weekday === weekday)
+      .map((r) => ({ opensAt: r.opens_at.slice(0, 5), closesAt: r.closes_at.slice(0, 5) })),
+  }))
+}
+
+export async function fetchTestimonials(): Promise<Testimonial[]> {
+  const { data, error } = await client()
+    .from('testimonials')
+    .select('id, client_name, comment, photo_url')
+    .eq('published', true)
+    .order('sort_order')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data as { id: string; client_name: string; comment: string; photo_url: string | null }[]).map((r) => ({
+    id: r.id,
+    clientName: r.client_name,
+    comment: r.comment,
+    photoUrl: r.photo_url,
+  }))
+}
+
+export async function fetchGallery(): Promise<GalleryItem[]> {
+  const { data, error } = await client()
+    .from('gallery_images')
+    .select('id, category, image_url, before_image_url, caption')
+    .eq('published', true)
+    .order('sort_order')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data as { id: string; category: string; image_url: string; before_image_url: string | null; caption: string | null }[]).map((r) => ({
+    id: r.id,
+    category: r.category as ServiceCategory,
+    imageUrl: r.image_url,
+    beforeImageUrl: r.before_image_url,
+    caption: r.caption,
   }))
 }
 
